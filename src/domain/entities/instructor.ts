@@ -1,13 +1,13 @@
-import { EntityBase } from "../../core/entities/entity";
-import { UniqueEntityId } from "../../core/entities/unique-entity-id";
+import { EntityBase } from '../../core/entities/entity'
+import { UniqueEntityId } from '../../core/entities/unique-entity-id'
 
 interface InstructorProps {
-    name: string
+  name: string
 }
- export class Instructor extends EntityBase<InstructorProps> { 
-    static create(props: InstructorProps, id?: UniqueEntityId) {
-        const student = new Instructor({...props}, id)
+export class Instructor extends EntityBase<InstructorProps> {
+  static create(props: InstructorProps, id?: UniqueEntityId) {
+    const student = new Instructor({ ...props }, id)
 
-        return student
-    }   
+    return student
+  }
 }
