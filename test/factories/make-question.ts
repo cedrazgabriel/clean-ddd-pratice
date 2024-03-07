@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { UniqueEntityId } from 'src/core/entities/unique-entity-id'
 import {
   Question,
@@ -5,13 +6,19 @@ import {
 } from 'src/domain/forum/enterprise/entities/question'
 
 // O partial no typescript pega uma interface ou tipo e torna suas propriedades em opcionais.
-export function makeQuestion(override: Partial<QuestionProps> = {}) {
-  const question = Question.create({
-    title: 'Example question',
-    authorId: new UniqueEntityId('1'),
-    content: 'Test content',
-    ...override,
-  })
+export function makeQuestion(
+  override: Partial<QuestionProps> = {},
+  id?: UniqueEntityId,
+) {
+  const question = Question.create(
+    {
+      title: faker.lorem.sentence(),
+      authorId: new UniqueEntityId(),
+      content: faker.lorem.text(),
+      ...override,
+    },
+    id,
+  )
 
   return question
 }
