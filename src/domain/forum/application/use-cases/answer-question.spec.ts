@@ -3,9 +3,8 @@ import { IAnswersRepository } from '../repositories/interfaces/answer-repository
 import { Answer } from '../../enterprise/entities/answer'
 
 const fakeAnswerRepository: IAnswersRepository = {
-  create: async (answer: Answer) => {
-    answer.content = 'Nova resposta'
-  },
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  create: async (answer: Answer) => {},
 }
 
 test('Create an answer', async () => {
