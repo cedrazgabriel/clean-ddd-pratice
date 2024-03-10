@@ -51,7 +51,7 @@ export class Answer extends EntityBase<AnswerProps> {
     const answer = new Answer(
       {
         ...props,
-        createdAt: new Date(),
+        createdAt: props.createdAt ?? new Date(),
       },
       id,
     )
