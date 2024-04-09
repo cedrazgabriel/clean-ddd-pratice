@@ -7,7 +7,7 @@ interface DeleteQuestionUseCaseRequest {
 
 interface DeleteQuestionUseCaseResponse {}
 
-export class DeleteQuestionQuestionUseCase {
+export class DeleteQuestionUseCase {
   constructor(private questionRepository: IQuestionRepository) {}
 
   async execute({

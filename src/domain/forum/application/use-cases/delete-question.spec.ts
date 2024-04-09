@@ -1,15 +1,15 @@
 import { InMemoryQuestionRepository } from 'test/repositories/in-memory-questions-repository'
 import { makeQuestion } from 'test/factories/make-question'
-import { DeleteQuestionQuestionUseCase } from './delete-question'
+import { DeleteQuestionUseCase } from './delete-question'
 import { UniqueEntityId } from 'src/core/entities/unique-entity-id'
 
 let inMemoryQuestionRepository: InMemoryQuestionRepository
-let sut: DeleteQuestionQuestionUseCase
+let sut: DeleteQuestionUseCase
 
 describe('Delete question use case tests', () => {
   beforeEach(() => {
     inMemoryQuestionRepository = new InMemoryQuestionRepository()
-    sut = new DeleteQuestionQuestionUseCase(inMemoryQuestionRepository)
+    sut = new DeleteQuestionUseCase(inMemoryQuestionRepository)
   })
 
   test('Deve ser possível deletar uma questão', async () => {
