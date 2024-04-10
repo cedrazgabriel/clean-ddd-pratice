@@ -1,14 +1,14 @@
 import { UniqueEntityId } from './unique-entity-id'
 
-export class EntityBase<T> {
+export abstract class EntityBase<Props> {
   private _id: UniqueEntityId
-  protected props: T
+  protected props: Props
 
   get id() {
     return this._id
   }
 
-  protected constructor(props: T, id?: UniqueEntityId) {
+  protected constructor(props: Props, id?: UniqueEntityId) {
     this.props = props
     this._id = id ?? new UniqueEntityId()
   }
