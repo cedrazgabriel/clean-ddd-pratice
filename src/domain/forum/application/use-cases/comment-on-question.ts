@@ -2,6 +2,8 @@ import { IQuestionRepository } from '../repositories/interfaces/questions-reposi
 import { QuestionComment } from '../../enterprise/entities/question-comment'
 import { IQuestionCommentRepository } from '../repositories/interfaces/question-comment-repository'
 import { UniqueEntityId } from 'src/core/entities/unique-entity-id'
+import { Either, left, right } from 'src/core/either'
+import { ResourceNotFoundError } from './errors/resource-not-found-error'
 
 interface CommentOnQuestionUseCaseRequest {
   authorId: string
@@ -9,9 +11,12 @@ interface CommentOnQuestionUseCaseRequest {
   content: string
 }
 
-interface CommentOnQuestionUseCaseResponse {
-  questionComment: QuestionComment
-}
+type CommentOnQuestionUseCaseResponse = Either<
+  ResourceNotFoundError,
+  {
+    questionComment: QuestionComment
+  }
+>
 
 export class CommentOnQuestionQuestionUseCase {
   constructor(
@@ -26,7 +31,7 @@ export class CommentOnQuestionQuestionUseCase {
   }: CommentOnQuestionUseCaseRequest): Promise<CommentOnQuestionUseCaseResponse> {
     const question = await this.questionRepository.findById(questionId)
 
-    if (!question) throw new Error('Question not found')
+    if (!question) return left(new ResourceNotFoundError())
 
     const questionComment = QuestionComment.create({
       authorId: new UniqueEntityId(authorId),
@@ -36,8 +41,8 @@ export class CommentOnQuestionQuestionUseCase {
 
     await this.questionCommentRepository.create(questionComment)
 
-    return {
+    return right({
       questionComment,
-    }
+    })
   }
 }
