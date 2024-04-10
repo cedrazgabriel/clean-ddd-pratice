@@ -28,7 +28,7 @@ describe('Fetch question comment use case tests', () => {
       page: 1,
     })
 
-    expect(result.value?.questionComments.length).toHaveLength(3)
+    expect(result.value?.questionComments).toHaveLength(3)
   })
 
   test('Deve ser possível buscar os comentários de uma questão paginadas ', async () => {
