@@ -23,12 +23,12 @@ describe('Fetch answer comment use case tests', () => {
       makeAnswerComment({ answerId: new UniqueEntityId('answer-1') }),
     )
 
-    const { answerComments } = await sut.execute({
+    const result = await sut.execute({
       answerId: 'answer-1',
       page: 1,
     })
 
-    expect(answerComments).toHaveLength(3)
+    expect(result.value?.answerComments).toHaveLength(3)
   })
 
   test('Deve ser possível buscar os comentários de uma questão paginadas ', async () => {
@@ -38,8 +38,8 @@ describe('Fetch answer comment use case tests', () => {
       )
     }
 
-    const { answerComments } = await sut.execute({ answerId: '1', page: 2 })
+    const result = await sut.execute({ answerId: '1', page: 2 })
 
-    expect(answerComments.length).toBe(2)
+    expect(result.value?.answerComments.length).toBe(2)
   })
 })

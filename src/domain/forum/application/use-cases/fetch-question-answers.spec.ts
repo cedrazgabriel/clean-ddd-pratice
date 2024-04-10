@@ -23,9 +23,9 @@ describe('Fetch question answers tests', () => {
       makeAnswer({ questionId: new UniqueEntityId('1') }),
     )
 
-    const { answers } = await sut.execute({ questionId: '1', page: 1 })
+    const result = await sut.execute({ questionId: '1', page: 1 })
 
-    expect(answers.length).toBe(3)
+    expect(result.value?.answers.length).toBe(3)
   })
 
   test('Deve ser possível buscar as repostas de uma questão paginadas ', async () => {
@@ -35,8 +35,8 @@ describe('Fetch question answers tests', () => {
       )
     }
 
-    const { answers } = await sut.execute({ questionId: '1', page: 2 })
+    const result = await sut.execute({ questionId: '1', page: 2 })
 
-    expect(answers.length).toBe(2)
+    expect(result.value?.answers.length).toBe(2)
   })
 })
