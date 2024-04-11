@@ -8,11 +8,16 @@ import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
 
 let inMemoryQuestionRepository: InMemoryQuestionRepository
 let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository
+
 let sut: EditQuestionQuestionUseCase
 
 describe('Delete question use case tests', () => {
   beforeEach(() => {
-    inMemoryQuestionRepository = new InMemoryQuestionRepository()
+    inMemoryQuestionAttachmentRepository =
+      new InMemoryQuestionAttachmentRepository()
+    inMemoryQuestionRepository = new InMemoryQuestionRepository(
+      inMemoryQuestionAttachmentRepository,
+    )
     inMemoryQuestionAttachmentRepository =
       new InMemoryQuestionAttachmentRepository()
     sut = new EditQuestionQuestionUseCase(

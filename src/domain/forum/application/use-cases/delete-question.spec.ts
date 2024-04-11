@@ -3,13 +3,22 @@ import { makeQuestion } from 'test/factories/make-question'
 import { DeleteQuestionUseCase } from './delete-question'
 import { UniqueEntityId } from 'src/core/entities/unique-entity-id'
 import { NotAllowedError } from './errors/not-allowed-error'
+import { InMemoryQuestionAttachmentRepository } from 'test/repositories/in-memory-question-attachments-repository'
+import { makeQuestionAttachment } from 'test/factories/make-question-attachment'
 
 let inMemoryQuestionRepository: InMemoryQuestionRepository
+let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository
+
 let sut: DeleteQuestionUseCase
 
 describe('Delete question use case tests', () => {
   beforeEach(() => {
-    inMemoryQuestionRepository = new InMemoryQuestionRepository()
+    inMemoryQuestionAttachmentRepository =
+      new InMemoryQuestionAttachmentRepository()
+    inMemoryQuestionRepository = new InMemoryQuestionRepository(
+      inMemoryQuestionAttachmentRepository,
+    )
+
     sut = new DeleteQuestionUseCase(inMemoryQuestionRepository)
   })
 
@@ -17,18 +26,30 @@ describe('Delete question use case tests', () => {
     const createdQuestion = makeQuestion(
       {
         authorId: new UniqueEntityId('author-1'),
+        content: 'ola mundo',
       },
       new UniqueEntityId('question-1'),
     )
 
     await inMemoryQuestionRepository.create(createdQuestion)
+    inMemoryQuestionAttachmentRepository.items.push(
+      makeQuestionAttachment({
+        questionId: createdQuestion.id,
+        attachmentId: new UniqueEntityId('1'),
+      }),
+      makeQuestionAttachment({
+        questionId: createdQuestion.id,
+        attachmentId: new UniqueEntityId('2'),
+      }),
+    )
 
     await sut.execute({
       authorId: 'author-1',
       questionId: 'question-1',
     })
 
-    expect(inMemoryQuestionRepository.items.length).toBe(0)
+    expect(inMemoryQuestionRepository.items).toHaveLength(0)
+    expect(inMemoryQuestionAttachmentRepository.items.length).toBe(0)
   })
 
   test('Não deve ser possível deletar uma questão a qual não o pertence', async () => {
