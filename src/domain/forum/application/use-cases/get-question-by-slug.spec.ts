@@ -30,5 +30,10 @@ describe('Get question by slug tests', () => {
     })
 
     expect(result.isRight()).toBe(true)
+    expect(result.value).toMatchObject({
+      question: expect.objectContaining({
+        title: createdQuestion.title,
+      }),
+    })
   })
 })
