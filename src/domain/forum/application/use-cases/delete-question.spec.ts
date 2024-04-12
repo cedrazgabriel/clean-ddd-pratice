@@ -32,6 +32,7 @@ describe('Delete question use case tests', () => {
     )
 
     await inMemoryQuestionRepository.create(createdQuestion)
+
     inMemoryQuestionAttachmentRepository.items.push(
       makeQuestionAttachment({
         questionId: createdQuestion.id,

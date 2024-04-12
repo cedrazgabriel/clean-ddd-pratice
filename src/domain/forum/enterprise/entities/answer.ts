@@ -1,10 +1,12 @@
 import { EntityBase } from 'src/core/entities/entity'
 import { UniqueEntityId } from 'src/core/entities/unique-entity-id'
 import { Optional } from 'src/core/types/optional'
+import { AnswerAttachmentList } from './answer-attachment-list'
 
 export interface AnswerProps {
   authorId: UniqueEntityId
   questionId: UniqueEntityId
+  attachments: AnswerAttachmentList
   content: string
   createdAt: Date
   updatedAt?: Date
@@ -35,6 +37,10 @@ export class Answer extends EntityBase<AnswerProps> {
     return this.content.substring(0, 120).trimEnd().concat('...')
   }
 
+  get attachments() {
+    return this.props.attachments
+  }
+
   private touch() {
     this.props.updatedAt = new Date()
   }
@@ -44,13 +50,19 @@ export class Answer extends EntityBase<AnswerProps> {
     this.touch()
   }
 
+  set attachments(attachments: AnswerAttachmentList) {
+    this.props.attachments = attachments
+    this.touch()
+  }
+
   static create(
-    props: Optional<AnswerProps, 'createdAt'>,
+    props: Optional<AnswerProps, 'createdAt' | 'attachments'>,
     id?: UniqueEntityId,
   ) {
     const answer = new Answer(
       {
         ...props,
+        attachments: props.attachments ?? new AnswerAttachmentList(),
         createdAt: props.createdAt ?? new Date(),
       },
       id,
