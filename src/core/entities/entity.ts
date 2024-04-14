@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { UniqueEntityId } from './unique-entity-id'
 
 export abstract class EntityBase<Props> {
@@ -11,5 +12,17 @@ export abstract class EntityBase<Props> {
   protected constructor(props: Props, id?: UniqueEntityId) {
     this.props = props
     this._id = id ?? new UniqueEntityId()
+  }
+
+  public equals(entity: EntityBase<any>) {
+    if (entity === this) {
+      return true
+    }
+
+    if (entity._id === this._id) {
+      return true
+    }
+
+    return false
   }
 }
