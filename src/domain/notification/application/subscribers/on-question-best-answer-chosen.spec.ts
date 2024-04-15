@@ -1,5 +1,4 @@
 import { makeAnswer } from 'test/factories/make-answer'
-import { OnAnswerCreated } from './on-answer-created'
 import { InMemoryAnswersRepository } from 'test/repositories/in-memory-answers-repository'
 import { InMemoryAnswerAttachmentRepository } from 'test/repositories/in-memory-answer-attachment-repository'
 import { InMemoryQuestionRepository } from 'test/repositories/in-memory-questions-repository'
@@ -13,6 +12,7 @@ import { InMemoryNotificationRepository } from 'test/repositories/in-memory-noti
 import { makeQuestion } from 'test/factories/make-question'
 import { SpyInstance } from 'vitest'
 import { waitFor } from 'test/utils/wait-for'
+import { OnQuestionBestAnswerChosen } from './on-question-best-answer-chosen'
 
 let inMemoryQuestionAttachmentRepository: InMemoryQuestionAttachmentRepository
 let inMemoryQuestionRepository: InMemoryQuestionRepository
@@ -26,7 +26,7 @@ let sendNotificationExecuteSpy: SpyInstance<
   Promise<SendNotificationUseCaseResponse>
 >
 
-describe('on answer created tests', () => {
+describe('on question best answer chosen  tests', () => {
   beforeEach(() => {
     inMemoryNotificationRepository = new InMemoryNotificationRepository()
     inMemoryQuestionAttachmentRepository =
@@ -45,14 +45,21 @@ describe('on answer created tests', () => {
 
     sendNotificationExecuteSpy = vi.spyOn(sendNotificationUseCase, 'execute')
 
-    new OnAnswerCreated(inMemoryQuestionRepository, sendNotificationUseCase)
+    new OnQuestionBestAnswerChosen(
+      inMemoryAnswerRepository,
+      sendNotificationUseCase,
+    )
   })
-  test('deve ser possivel mandar uma notificacao quando uma answer for criada', async () => {
+  test('deve ser possivel mandar uma notificacao quando uma melhor resposta p uma questao for definida', async () => {
     const question = makeQuestion()
     const answer = makeAnswer({ questionId: question.id })
 
     inMemoryQuestionRepository.create(question)
     inMemoryAnswerRepository.create(answer)
+
+    question.bestAnswerId = answer.id
+
+    inMemoryQuestionRepository.save(question)
 
     await waitFor(() => {
       expect(sendNotificationExecuteSpy).toHaveBeenCalled()
